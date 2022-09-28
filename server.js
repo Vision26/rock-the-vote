@@ -1,23 +1,36 @@
+
 // 1. set up express methods
 const express = require('express')
 const app = express()
+require('dotenv').config()
+const morgan = require('morgan')
+const mongoose = require('mongoose')
+const { expressjwt } = require('express-jwt')
 
-//1.
+process.env.SECRET
+
+
 app.use(express.json())
+app.use(morgan('dev'))
 
-//1.
+mongoose.connect(
+    'mongodb://localhost:27017/rockthevotes',
+    () => console.log('Connected to the DB')
+)
+
 app.use('/auth', require('./routes/authRouter.js'))
+app.use('/api', expressjwt({ secret: process.env.SECRET, algorithms: ['HS256'] }))
 
-//1.
+
 app.use((err, req, res, next) => {
     console.log(err)
     if(err.name === "UnauthorizedError"){
         res.status(err.status)
     }
-    return res.send({errMsg: err.message})
+    return res.send( {errMsg: err.message} )
 })
 
-//1.
+
 app.listen(9000, () => {
     console.log('Server: Local - Port - 9000')
 })
