@@ -1,12 +1,38 @@
-import React from 'react'
-import './App.css';
+import React, { useContext } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Navbar from './components/Navbar.js'
+import Auth from './components/Auth.js'
+import Profile from './components/Profile.js'
+import Public from './components/Public.js'
+import ProtectedRoute from './components/ProtectedRoute.js'
+import './App.css'
+import { UserContext } from './context/UserContext.js'
 
-function App() {
+export default function App(){
+  const { token, logout, userState, user } = useContext(UserContext)
   return (
-    <div className="App">
-     
-    </div>
-  );
-}
+    <div className="app">
 
-export default App;
+        { token && <Navbar logout={logout} /> }
+  
+      <Routes>
+        <Route 
+          exact path="/" 
+          element={token ? <Navigate to="/profile"/> : <Auth />}
+        />
+        <Route 
+          path="/profile"
+          element={<ProtectedRoute token={token} redirectTo="/">
+            <Profile />
+          </ProtectedRoute>}
+        />
+        <Route 
+          path="/public"
+          element={<ProtectedRoute token={token} redirectTo="">
+            <Public />
+            </ProtectedRoute >}
+        />
+      </Routes>
+    </div>
+  )
+}

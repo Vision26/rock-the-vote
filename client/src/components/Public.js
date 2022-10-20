@@ -1,12 +1,11 @@
-import React from "react"
+import React from 'react'
+import TodoList from './TodoList.js'
+import Todo from './Todo.js'
 
-function Public(){
+export default function Public(){
+  return (
+    <div className="public">
 
-    return(
-        <div>
-
-        </div>
-    )
+    </div>
+  )
 }
-
-export default Public
