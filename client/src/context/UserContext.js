@@ -18,6 +18,8 @@ function UserProvider(props) {
         errMsg:''
     }
 
+
+
     const [userState, setUserState] = useState(initState)
 
     const signup = credentials => {
@@ -90,13 +92,21 @@ function UserProvider(props) {
         userAxios.post("/api/todo", newTodo)
         .then(res => setUserState(prevState => ({
             ...prevState,
-            todos: [prevState.todos, res.data]
+            todos: [...prevState.todos, res.data]
         })))
         .catch(err => console.log(err.response.data.errMsg))
     }
 
+    const updateTodo = (todoId, updates) => {
+        userAxios.put(`/api/todo/${todoId}`, updates)
+        .then(res => {
+       getUserTodos()
+        })
+        .catch()
+    }
+//(two seperate)->arrays for user that have upvote and downvoted
     return (
-        <UserContext.Provider value={{ ...userState, signup, login, logout, addTodo, resetAuthErr }}>
+        <UserContext.Provider value={{ ...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos }}>
             {props.children}
         </UserContext.Provider>
     )

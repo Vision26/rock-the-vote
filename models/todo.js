@@ -21,7 +21,13 @@ const todoSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true
+  },
+  upvotes:{
+    type: Array
+  },
+  downvotes:{
+    type: Array
   }
 })
-
+//upvotes downvotes change number to array
 module.exports = mongoose.model("Todo", todoSchema)

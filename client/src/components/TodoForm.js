@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 const initInputs = {
   title: "",
   description: "",
-  imgUrl: ""
+  imgUrl: "",
+  
 }
 
 export default function TodoForm(props){
@@ -23,6 +24,8 @@ const { addTodo } = props
     addTodo(inputs)
     setInputs(initInputs)
   }
+
+
 
   const { title, description, imgUrl } = inputs
   return (

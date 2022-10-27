@@ -9,3 +9,4 @@ export default function Public(){
     </div>
   )
 }
+//have a way to get all todos regardless of the user for all users to access and comment and vote

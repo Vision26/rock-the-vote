@@ -5,7 +5,7 @@ const Todo = require('../models/todo.js')
 // Get All Todos
 todoRouter.get("/", (req, res, next) => {
   Todo.find((err, todos) => {
-    if(err){
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -16,7 +16,7 @@ todoRouter.get("/", (req, res, next) => {
 // Get todos by user id
 todoRouter.get("/user", (req, res, next) => {
   Todo.find({ user: req.auth._id }, (err, todos) => {
-    if(err){
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -29,7 +29,7 @@ todoRouter.post("/", (req, res, next) => {
   req.body.user = req.auth._id
   const newTodo = new Todo(req.body)
   newTodo.save((err, savedTodo) => {
-    if(err){
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -42,7 +42,7 @@ todoRouter.delete("/:todoId", (req, res, next) => {
   Todo.findOneAndDelete(
     { _id: req.params.todoId, user: req.auth._id },
     (err, deletedTodo) => {
-      if(err){
+      if (err) {
         res.status(500)
         return next(err)
       }
@@ -52,34 +52,43 @@ todoRouter.delete("/:todoId", (req, res, next) => {
 })
 
 // Update Todo
-todoRouter.put("/:todoId", (req, res, next) => {
+todoRouter.put("/:todoId", async(req, res, next) => {
+  const newBody = { ...req.body }
+  const currentTodo = await Todo.findOne({ _id: req.params.todoId })
+  const votes = { upvotes: [...currentTodo.upvotes], downvotes: [...currentTodo.downvotes] }
+  if (newBody.upVoting) {
+    if (votes.upvotes.includes(newBody.userId)) {
+      return
+    }
+    votes.upvotes.push(newBody.userId)
+    votes.downvotes = votes.downvotes.filter(down => down !== newBody.userId)
+  }
+
+  if(newBody.downVoting){
+    if(votes.downvotes.includes(newBody.userId)){
+      return
+    }
+    votes.downvotes.push(newBody.userId)
+    votes.upvotes = votes.upvotes.filter(up => up !== newBody.userId)
+  }
+
+  //comments section
+
   Todo.findOneAndUpdate(
-    { _id: req.params.todoId, user: req.auth._id },
-    req.body,
+    { _id: req.params.todoId },
+    votes,
     { new: true },
-    (err, updatedTodo) => {
-      if(err){
+    (err, up) => {
+      if (err) {
         res.status(500)
         return next(err)
       }
-      return res.status(201).send(updatedTodo)
+      return res.status(201).send(up)
     }
   )
 })
 
-todoRouter.put('/likes/:issueId', (req, res, next) => {
-    Todo.findOneAndUpdate(
-        { _id: req.params.issueId },
-        { $inc: { likes: 1 } },
-        { new: true },
-        (err, up) => {
-            if(err){
-                res.status(500)
-                return next(err)
-            }
-            return res.status(201).send(up)
-        }
-    )
-})
+
+
 
 module.exports = todoRouter
