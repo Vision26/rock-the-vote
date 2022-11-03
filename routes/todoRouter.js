@@ -56,6 +56,7 @@ todoRouter.put("/:todoId", async(req, res, next) => {
   const newBody = { ...req.body }
   const currentTodo = await Todo.findOne({ _id: req.params.todoId })
   const votes = { upvotes: [...currentTodo.upvotes], downvotes: [...currentTodo.downvotes] }
+  const allComments = { comments: [...currentTodo.comments] }
   if (newBody.upVoting) {
     if (votes.upvotes.includes(newBody.userId)) {
       return
@@ -73,6 +74,12 @@ todoRouter.put("/:todoId", async(req, res, next) => {
   }
 
   //comments section
+// if(newBody.submitComment){
+//   if(allComments.comments.includes(newBody.userId)){
+//     return
+//   }
+//   allComments.comments.push(newBody.userId)
+// }
 
   Todo.findOneAndUpdate(
     { _id: req.params.todoId },

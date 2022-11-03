@@ -27,6 +27,9 @@ const todoSchema = new Schema({
   },
   downvotes:{
     type: Array
+  },
+  comments:{
+    type: Array
   }
 })
 //upvotes downvotes change number to array
