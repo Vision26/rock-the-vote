@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import axios from "axios"
 
 function CommentForm(props){
@@ -11,6 +11,8 @@ const commFormState = {
     }
 }
 const [state, setState] = useState(commFormState)
+
+
 
 //handleChange
 const handleFieldChange = e => {
@@ -39,33 +41,32 @@ const onSubmit = e => {
   
       // persist the comments on server
       let { comment } = state;
-    axios.post()
-        .then(res => res.json())
+    axios.post('api/todo')
+        .then(res => res.data)
         .then(res => {
           if (res.error) {
-            this.setState({ loading: false, error: res.error });
+            setState({ loading: false, error: res.error });
           } else {
             // add time return from api and push comment to parent state
             comment.time = res.time;
-            this.props.addComment(comment);
+            props.addComment(comment);
   
             // clear the message box
-            this.setState({
+            setState({
               loading: false,
               comment: { ...comment, message: "" }
             });
           }
         })
         .catch(err => {
-          this.setState({
+          setState({
             error: "Something went wrong while submitting form.",
             loading: false
           });
         });
-    }
   
-    isFormValid() {
-      return state.comment.name !== "" && this.state.comment.message !== "";
+  const isFormValid = () => {
+      return state.comment.name !== "" && state.comment.message !== "";
     }
 }
 
@@ -74,8 +75,9 @@ const renderError = () => {
         <div className="alert alert-danger">{state.error}</div>
     ) : null
 }
+
     return(
-<React.Fragment>
+
         <form method="post" onSubmit={onSubmit}>
           <div className="form-group">
             <input
@@ -107,8 +109,8 @@ const renderError = () => {
             </button>
           </div>
         </form>
-      </React.Fragment>
+
     )
-}
+    }
 
 export default CommentForm
