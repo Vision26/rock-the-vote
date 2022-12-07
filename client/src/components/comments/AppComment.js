@@ -1,24 +1,34 @@
-import React, {useContext} from 'react'
-import { ComContext } from "./ComContext"
+import React, {useState} from 'react'
+import axios from "axios"
 import CommentList from "./CommentList"
 import CommentForm from "./CommentForm"
 import Comment from "./Comment"
 
 function CommentSection(props){
-  const {comments, loading, addComment} = useContext(ComContext)
-  const loadingSpin = loading ? 'App-logo Spin' : 'App-logo'
-
-  // const getTodos = () => {
-  //   axios.get('api/todo')
-  // .then(res => setPublicState(res.data))
-  // .catch(err => console.log(err))
-  // }
+  const publicState = {
+    comments: [],
+    loading: false,
+    error:""
+  }
+  const [state, setPublicState] = useState(publicState)
+  const {comments, loading} = state
   
-  // useEffect(() => {
-  // getTodos()
-  // }, [])
-
-  return (
+  
+  const addComment = comment => {
+    axios.post("/api/todos", comment)
+    .then(res => setPublicState(prevState => ({
+     comments: [...prevState, res.data],
+     loading: false
+    })))
+    .catch(err =>  setPublicState({
+      error: "Something went wrong while submitting form.",
+      loading: false
+    }))
+     }
+      
+      const loadingSpin = loading ? 'App-logo Spin' : 'App-logo'
+      console.log(comments)
+      return (
     <div className="App container bg-light shadow">
     <header className="App-header">
       {/* <img src={logo} className={loadingSpin} alt="logo" /> */}
@@ -35,7 +45,8 @@ function CommentSection(props){
         <h6>Say something about React</h6>
         <CommentForm addComment={addComment} />
         {comments.map((comment, index) => (
-          <Comment key={index} comment={comment} />
+          // <Comment key={index} comment={comment} />
+          console.log(comment)
         ))}
       </div>
       <div className="col-8  pt-3 bg-white">

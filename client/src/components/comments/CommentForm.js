@@ -1,116 +1,116 @@
-import React, {useState, useEffect} from "react"
+import React, { useState } from "react"
 import axios from "axios"
 
-function CommentForm(props){
-const commFormState = {
+function CommentForm(props) {
+  const commFormState = {
     loading: false,
-    error:"",
+    error: "",
     comment:{
-        name:"",
-        message:""
+      name:"",
+      message:""
     }
-}
-const [state, setState] = useState(commFormState)
+  }
+  
+  const [frmState, setFrmComment] = useState(commFormState)
+  const {name, message} = frmState.comment
+  const {loading, error}  = frmState
+
+  const {addComment} = props
 
 
-
-//handleChange
-const handleFieldChange = e => {
-    const {value, name} = e.target
-    setState(prevState => ({
-        ...prevState, 
-        comment:{
-            ...state.comment,
-            [name]: value
-        }
+  //handleChange
+  const handleFieldChange = e => {
+    const { value, name } = e.target
+    setFrmComment(prevState => ({
+      comment:{
+        ...prevState,
+        [name]: value
+      }
     }))
-}
+  }
 
-//Form Submit Handler
-const onSubmit = e => {
+  //place this last inside the onSubmit function
+  // const isFormValid = () => {
+  //   return state.comment.name !== "" && state.comment.message !== "";
+  // }
+ 
+
+  const isFormValid = () => {
+    return name !== "" && message !== "";
+  }
+
+
+  //Form Submit Handler
+  const onSubmit = e => {
     //preven default
     e.preventDefault()
 
     if (!isFormValid()) {
-        setState({ error: "All fields are required." });
-        return;
-      }
-  
-      // loading status and clear error
-      setState({ error: "", loading: true });
-  
-      // persist the comments on server
-      let { comment } = state;
-    axios.post('api/todo')
-        .then(res => res.data)
-        .then(res => {
-          if (res.error) {
-            setState({ loading: false, error: res.error });
-          } else {
-            // add time return from api and push comment to parent state
-            comment.time = res.time;
-            props.addComment(comment);
-  
-            // clear the message box
-            setState({
-              loading: false,
-              comment: { ...comment, message: "" }
-            });
-          }
-        })
-        .catch(err => {
-          setState({
-            error: "Something went wrong while submitting form.",
-            loading: false
+      setFrmComment({ error: "All fields are required." });
+      return;
+    }
+
+    // loading status and clear error
+    setFrmComment({ error: "", loading: true });
+//saving point: figure out how to post 
+    // persist the comments on server
+        if (error) {
+          setFrmComment({ loading: false, error: error });
+        } else {
+          // add time return from api and push comment to parent state
+          addComment(frmState.comment);
+
+          // clear the message box
+          setFrmComment({
+            loading: false,
+            comment: { ...frmState.comment, message: "" }
           });
-        });
+        }
   
-  const isFormValid = () => {
-      return state.comment.name !== "" && state.comment.message !== "";
-    }
-}
+    isFormValid()
+  }
 
-const renderError = () => {
-    return state.error ? (
-        <div className="alert alert-danger">{state.error}</div>
+  const renderError = () => {
+    return error ? (
+      <div className="alert alert-danger">{error}</div>
     ) : null
+  }
+
+  return (
+
+    <form method="post" onSubmit={onSubmit}>
+      <div className="form-group">
+        <input
+          onChange={handleFieldChange}
+          value={name}
+          className="form-control"
+          placeholder="😎 Your Name"
+          name="name"
+          type="text"
+        />
+      </div>
+
+      <div className="form-group">
+        <textarea
+          onChange={handleFieldChange}
+          value={message}
+          className="form-control"
+          placeholder="🤬 Your Comment"
+          name="message"
+          rows="5"
+        />
+      </div>
+
+      {renderError()}
+
+      <div className="form-group">
+        <button disabled={loading} className="btn btn-primary">
+          Comment ➤
+        </button>
+      </div>
+    </form>
+
+  )
 }
-
-    return(
-
-        <form method="post" onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              onChange={handleFieldChange}
-              value={state.comment.name}
-              className="form-control"
-              placeholder="😎 Your Name"
-              name="name"
-              type="text"
-            />
-          </div>
-
-          <div className="form-group">
-            <textarea
-              onChange={handleFieldChange}
-              value={state.comment.message}
-              className="form-control"
-              placeholder="🤬 Your Comment"
-              name="message"
-              rows="5"
-            />
-          </div>
-
-          {renderError()}
-
-          <div className="form-group">
-            <button disabled={state.loading} className="btn btn-primary">
-              Comment ➤
-            </button>
-          </div>
-        </form>
-
-    )
-    }
 
 export default CommentForm
