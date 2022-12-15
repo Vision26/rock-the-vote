@@ -37,6 +37,19 @@ todoRouter.post("/", (req, res, next) => {
   })
 })
 
+//add new comments
+// todoRouter.post('/comments', (req, res, next) => {
+  // req.body.user = req.auth._id
+  // const newComment = new Todo(req.body)
+// newComment.save((err, saveComm) => {
+  // if(err){
+    // res.status(500)
+    // return next(err)
+  // }
+  // return res.status(201).send(saveComm)
+// })
+// })
+
 // Delete Todo
 todoRouter.delete("/:todoId", (req, res, next) => {
   Todo.findOneAndDelete(
@@ -74,12 +87,12 @@ todoRouter.put("/:todoId", async(req, res, next) => {
   }
 
   //comments section
-// if(newBody.submitComment){
-//   if(allComments.comments.includes(newBody.userId)){
-//     return
-//   }
-//   allComments.comments.push(newBody.userId)
-// }
+if(newBody.submitComment){
+  if(allComments.comments.includes(newBody.userId)){
+    return
+  }
+  allComments.comments.push(newBody.userId)
+}
 
   Todo.findOneAndUpdate(
     { _id: req.params.todoId },

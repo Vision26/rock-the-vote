@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 
+
 export default function Todo(props){
   const { title, description, imgUrl, _id, upvotes, downvotes} = props
   const { updateTodo, user, } = useContext(UserContext)
@@ -17,6 +18,13 @@ const handleChange = e => {
   }))
 }
 
+const handleSubmit = () => {
+  updateTodo(_id, {submitComment: true, userId: user._id, comment})
+  setTodoState({
+    comment:""
+  })
+}
+
   return (
     <div className="todo">
 <div>
@@ -26,7 +34,8 @@ const handleChange = e => {
 <h3>{upvotes.length - downvotes.length}</h3>
 <button onClick={() => updateTodo( _id, { upVoting: true, userId: user._id } )}>Upvote</button>
 <button onClick={() => updateTodo( _id, {downVoting: true, userId: user._id } )}>Downvote</button>
-{/* <form onSubmit={() => updateTodo(_id, {submitComment: true, userId: user._id, comment})}>
+<p>{comment}</p>
+<br/>
   <input 
   type="text"
   placeholder='Comments'
@@ -34,10 +43,8 @@ const handleChange = e => {
   value={comment}
   onChange={handleChange}
   />
-  <button>Submit</button>
-</form> */}
+  <button onClick={() => handleSubmit()}>Submit</button>
 
-{/* <p>{comment}</p> */}
 </div>
     </div>
   )

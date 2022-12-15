@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import AppComment from './comments/AppComment'
+
 function Public(){
   return (
     <div>
- <AppComment />
+
   </div>
   )
 }
