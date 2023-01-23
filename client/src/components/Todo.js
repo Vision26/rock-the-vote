@@ -4,11 +4,11 @@ import { UserContext } from '../context/UserContext'
 
 export default function Todo(props){
   const { title, description, imgUrl, _id, upvotes, downvotes} = props
-  const { updateTodo, user, } = useContext(UserContext)
+  const { updateTodo, user, addComment} = useContext(UserContext)
   const [todoState, setTodoState ] = useState({
-    comment:''
+    allComment:''
   })
-  const { comment } = todoState
+  const { allComment } = todoState
 
 const handleChange = e => {
   const { name, value } = e.target
@@ -19,9 +19,9 @@ const handleChange = e => {
 }
 
 const handleSubmit = () => {
-  updateTodo(_id, {submitComment: true, userId: user._id, comment})
+  addComment(_id, allComment)
   setTodoState({
-    comment:""
+    allComment:""
   })
 }
 
@@ -34,13 +34,13 @@ const handleSubmit = () => {
 <h3>{upvotes.length - downvotes.length}</h3>
 <button onClick={() => updateTodo( _id, { upVoting: true, userId: user._id } )}>Upvote</button>
 <button onClick={() => updateTodo( _id, {downVoting: true, userId: user._id } )}>Downvote</button>
-<p>{comment}</p>
+<p>{allComment}</p>
 <br/>
   <input 
   type="text"
   placeholder='Comments'
   name="comment"
-  value={comment}
+  value={allComment}
   onChange={handleChange}
   />
   <button onClick={() => handleSubmit()}>Submit</button>

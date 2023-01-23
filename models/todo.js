@@ -1,6 +1,18 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const commentSchema = new Schema({
+  comment:{
+    type: String,
+    required: true
+  },
+  rndmUser:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  }
+})
+
 const todoSchema = new Schema({
   title: {
     type: String,
@@ -28,9 +40,9 @@ const todoSchema = new Schema({
   downvotes:{
     type: Array
   },
-  // comments:{
-  //   type: Array
-  // }
+  comments:[ commentSchema ]
 })
 //upvotes downvotes change number to array
-module.exports = mongoose.model("Todo", todoSchema)
+const Comment = mongoose.model("Comment", commentSchema)
+const Todo = mongoose.model("Todo", todoSchema)
+module.exports = (Comment, Todo)

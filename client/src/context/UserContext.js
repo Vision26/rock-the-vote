@@ -104,9 +104,16 @@ function UserProvider(props) {
         })
         .catch()
     }
+
+    const addComment = (id, newComment) => {
+        console.log(newComment)
+        userAxios.post(`/api/todo/comment/${id}`, newComment)
+        .then(res => console.log(res))
+        .catch(err => console.log(err.data))
+    }
 //(two seperate)->arrays for user that have upvote and downvoted
     return (
-        <UserContext.Provider value={{ ...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos }}>
+        <UserContext.Provider value={{ ...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos, addComment }}>
             {props.children}
         </UserContext.Provider>
     )

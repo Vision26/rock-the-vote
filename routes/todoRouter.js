@@ -87,12 +87,12 @@ todoRouter.put("/:todoId", async(req, res, next) => {
   }
 
   //comments section
-if(newBody.submitComment){
-  if(allComments.comments.includes(newBody.userId)){
-    return
-  }
-  allComments.comments.push(newBody.userId)
-}
+// if(newBody.submitComment){
+//   if(allComments.comments.includes(newBody.userId)){
+//     return
+//   }
+//   allComments.comments.push(newBody.userId)
+// }
 
   Todo.findOneAndUpdate(
     { _id: req.params.todoId },
