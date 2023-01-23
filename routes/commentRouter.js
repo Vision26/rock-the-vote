@@ -5,26 +5,24 @@ const mongoose = require('mongoose')
 // const { populate } = require("../models/todo.js")
 
 commentRouter.post('/:postId', (req, res, next) => {
-    const newComment = req.body
+    const { newComment } = req.body
     // console.log(req)
     Todo.findOneAndUpdate(
-{_id: req.params.postId, user: req.auth._id},
-{$addToSet: { comments:{ comment: newComment.comments, rndmUser: mongoose.Types.ObjectId(req.auth._id)}}},
-{ new: true }
-    ).populate({
-        path: 'comments',
-            populate: {
-                path: 'rndmUser',
-                select: 'username',
-            }
-    }).exec((err, populatedPost) => {
-        if(err){
+        { _id: req.params.postId, user: req.auth._id },
+        { $addToSet: { comments: { comment: newComment, rndmUser: mongoose.Types.ObjectId(req.auth._id) } } },
+        { new: true }
+    ).populate("comments").exec((err, populatedPost) => {
+        if (err) {
             res.status(500)
             return next(err)
         }
         return res.status(201).send(populatedPost)
     })
 })
+
+//populate:
+
+
 
 // Post.find()
 //   .populate({

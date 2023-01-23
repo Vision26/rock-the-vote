@@ -107,9 +107,9 @@ function UserProvider(props) {
 
     const addComment = (id, newComment) => {
         console.log(newComment)
-        userAxios.post(`/api/todo/comment/${id}`, newComment)
+        userAxios.post(`/api/todo/comment/${id}`, {newComment})
         .then(res => console.log(res))
-        .catch(err => console.log(err.data))
+        .catch(err => console.log(err))
     }
 //(two seperate)->arrays for user that have upvote and downvoted
     return (
