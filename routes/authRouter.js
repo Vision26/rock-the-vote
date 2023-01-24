@@ -54,5 +54,14 @@ authRouter.post("/login", (req, res, next) => {
   })
 })
 
+authRouter.get('/', (req, res, next) => {
+  User.find((err, look) => {
+    if(err){
+      res.status(500)
+      return next(err)
+    }
+    res.status(200).send(look)
+  })
+})
 
 module.exports = authRouter

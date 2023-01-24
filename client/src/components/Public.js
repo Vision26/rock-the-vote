@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import React, {useContext} from 'react'
+import { UserContext } from '../context/UserContext.js'
 
-function Public(){
+function Public(props){
+const {title} = props
   return (
     <div>
-
+<h1>{title}</h1>
   </div>
   )
 }

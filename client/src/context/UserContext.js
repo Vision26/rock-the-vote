@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios"
 const UserContext = React.createContext()
 
@@ -20,11 +20,7 @@ function UserProvider(props) {
 
     const [userState, setUserState] = useState(initState)
 
-const [ commentState, setCommentState ] = useState({
-    getComments: []
-})
-
-const {getComments} = commentState
+const [ commentState, setCommentState ] = useState([])
 
     const signup = credentials => {
         axios.post('/auth/signup', credentials)
@@ -109,23 +105,14 @@ const {getComments} = commentState
         .catch()
     }
 
-    const getTheComments = () => {
-        userAxios.get('/api/todo/comment')
-        .then(res => setCommentState(res.data))
-    }
-
     const addComment = (id, newComment) => {
-        // console.log(newComment)
         userAxios.post(`/api/todo/comment/${id}`, {newComment})
-        .then(res => setCommentState(prevState => ({
-            ...prevState,
-            getComments: [...prevState.getComments, res.data]
-        })))
+        .then(res => console.log(res.data))
         .catch(err => console.log(err))
     }
 //(two seperate)->arrays for user that have upvote and downvoted
     return (
-        <UserContext.Provider value={{ getComments, ...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos, addComment }}>
+        <UserContext.Provider value={{ userAxios, commentState, setCommentState,...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos, addComment }}>
             {props.children}
         </UserContext.Provider>
     )

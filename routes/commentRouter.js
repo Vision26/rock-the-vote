@@ -30,6 +30,18 @@ commentRouter.get('/:postId', (req, res, next) => {
     })
 })
 
+commentRouter.delete('/:postId', (req, res, next) => {
+    Todo.findOneAndDelete(
+        {_id: req.params.postId}, 
+        (err, del) => {
+            if(err){
+                res.status(500)
+                return next(err)
+            }
+            res.status(200).send(`${del} Deleted`)
+    })
+})
+
 module.exports = commentRouter
   
 
