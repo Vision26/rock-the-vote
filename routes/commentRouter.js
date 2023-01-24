@@ -20,7 +20,18 @@ commentRouter.post('/:postId', (req, res, next) => {
     })
 })
 
-//populate:
+commentRouter.get('/:postId', (req, res, next) => {
+    Todo.find((err, comms) => {
+        if (err) {
+            res.status(500)
+            return next(err)
+          }
+          return res.status(200).send(comms)
+    })
+})
+
+module.exports = commentRouter
+  
 
 
 
@@ -38,5 +49,3 @@ commentRouter.post('/:postId', (req, res, next) => {
 //     { $addToSet: { comments:{ comment: newComment.comment, author: mongoose.Types.ObjectId(req.auth._id)}} },
 //     { new: true }
 //     )
-
-module.exports = commentRouter

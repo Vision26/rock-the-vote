@@ -1,12 +1,13 @@
 import React, {useContext, useEffect} from 'react'
 import TodoForm from './TodoForm.js'
 import TodoList from './TodoList.js'
+import CommentList from './CommentList.js'
 import Todo from './Todo.js'
 import { UserContext } from '../context/UserContext.js'
 
 
 export default function Profile(){
-  const { user:{ username }, addTodo, todos, getUserTodos } = useContext(UserContext)
+  const { user:{ username }, addTodo, todos, getUserTodos, getComments } = useContext(UserContext)
   useEffect(() => {
 getUserTodos()
   }, [])
@@ -17,6 +18,7 @@ getUserTodos()
       <TodoForm addTodo={addTodo}/>
       <h3>Your Issues</h3>
       <TodoList todos={todos} />
+      <CommentList getComments={getComments}/>
     </div>
   )
 }
