@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 commentRouter.post('/:postId', (req, res, next) => {
     const { newComment } = req.body
-    // console.log(req)
+    console.log(req)
     Todo.findOneAndUpdate(
         { _id: req.params.postId, user: req.auth._id },
         { $addToSet: { comments: { comment: newComment, rndmUser: mongoose.Types.ObjectId(req.auth._id) } } },
@@ -17,6 +17,17 @@ commentRouter.post('/:postId', (req, res, next) => {
             return next(err)
         }
         return res.status(201).send(populatedPost)
+    })
+})
+
+commentRouter.get('/', (req, res, next) => {
+    Todo.find(
+        (err, comms) => {
+        if (err) {
+            res.status(500)
+            return next(err)
+          }
+          return res.status(200).send(comms)
     })
 })
 
@@ -32,15 +43,15 @@ commentRouter.get('/:postId', (req, res, next) => {
     })
 })
 
-commentRouter.delete('/:postId', (req, res, next) => {
+commentRouter.delete('/:rndmId', (req, res, next) => {
     Todo.findOneAndDelete(
-        {_id: req.params.postId}, 
+        {_id: req.params.rndmId, user: req.auth._id}, 
         (err, del) => {
             if(err){
                 res.status(500)
                 return next(err)
             }
-            res.status(200).send(`${del} Deleted`)
+            res.status(200).send(`Comment Deleted`)
     })
 })
 

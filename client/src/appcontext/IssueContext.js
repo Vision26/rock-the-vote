@@ -11,6 +11,8 @@ userAxios.interceptors.request.use(config => {
 function IssueProvider(props){
     //array where all issues can be accessed
 const [issueArr, setIssueArr] = useState([])
+//*all comments in the API will accessed in this array--**
+const [commentArr, setCommentArr] = useState([])
 //axios.get, getting data from api and placing it in issueArr
 const getIssues = () => {
     userAxios.get('/api/todo')
@@ -44,19 +46,36 @@ const deleteIssue = id => {
     .catch(err => console.log(err))
 }
 
-// const delSignUp = Id => {
-//     axios.delete(`/signup/${Id}`)
-//     .then(res => setSignUp(prev => prev.filter(prevs => {
-//         return prevs._id !== Id
-//     })))
-//     .catch(err => console.log(err))
-// }
+//*--ANYTHING BELOW THIS SECTION IS FOR COMMENT SECTION--**
+
+//adds comment
+const addComment = (id, newComment) => {
+    userAxios.post(`/api/todo/comment/${id}`, { newComment })
+        .then(res => setCommentArr(res.data))
+        .catch(err => console.log(err))
+}
+//gets comments from specific user--
+const getComments = () => {
+    userAxios.get('/api/todo/comment')
+    .then(res => setCommentArr(res.data))
+    .catch(err => console.log(err))
+}
+useEffect(() => {
+getComments()
+}, [])
+//gets comments from specific user--
+// console.log(commentArr)
+
     return(
     <IssueContext.Provider value={{
         issueArr,
         // postIssues,
         updateIssue,
-        deleteIssue
+        deleteIssue,
+        //--anything below is for comment section
+        addComment,
+        commentArr
+
     }}>
         {props.children}
         </IssueContext.Provider>)

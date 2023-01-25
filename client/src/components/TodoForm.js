@@ -1,7 +1,17 @@
 import React, { useState } from 'react'
 
 export default function TodoForm(props){
+const {title, description, imgUrl, id, btnText, submit} = props
+const [formState, setFormState] = useState({
+    title: title || '',
+    description: description || '',
+    imgUrl: imgUrl || ''
+})
+return(
+    <div>
 
+    </div>
+)
 }
 //-----THIS WILL BE TREATED LIKE ADDBOUNTY.JS IN BOUNTYHUNTERMONGOOSE----
 
