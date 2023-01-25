@@ -5,16 +5,19 @@ import '../App.css'
 import {IssueContext} from '../appcontext/IssueContext.js'
 
 export default function Profile() {
-  const {postIssues, issueArr} = useContext(IssueContext)
-  
+  const {postIssues, issueArr, updateIssue, deleteIssue} = useContext(IssueContext)
+
   return(
     <div className='bounty-container'>
       <TodoForm 
       submit={postIssues}
       btnText='Submit'
       />
+      
       {issueArr.map(iss => <Todo 
       key={iss._id}
+      edit={updateIssue}
+      deleteIssue={deleteIssue}
       {...iss}
       />)}
     </div>

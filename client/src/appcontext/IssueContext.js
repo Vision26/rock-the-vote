@@ -22,16 +22,41 @@ useEffect(() => {
 getIssues()
 }, [])
 //axios.post - add Issues to the API
-// const postIssues = newIssue => {
-//     userAxios.post('/api/todo', {newIssue})
-//     .then(res => setIssueArr(prev => [...prev, res.data]))
+const postIssues = newIssue => {
+    userAxios.post('/api/todo', {newIssue})
+    .then(res => setIssueArr(prev => [...prev, res.data]))
+    .catch(err => console.log(err))
+}
+// this will update issue
+const updateIssue = (todoId, updates) => {
+    userAxios.put(`/api/todo/${todoId}`, updates)
+        .then(res => {
+            getIssues()
+        })
+        .catch()
+}
+//this will delete issue
+const deleteIssue = id => {
+    userAxios.delete(`/api/todo/${id}`)
+    .then(res => setIssueArr(prev => prev.filter(prevs => {
+        return prevs._id !== id
+    })))
+    .catch(err => console.log(err))
+}
+
+// const delSignUp = Id => {
+//     axios.delete(`/signup/${Id}`)
+//     .then(res => setSignUp(prev => prev.filter(prevs => {
+//         return prevs._id !== Id
+//     })))
 //     .catch(err => console.log(err))
 // }
-
     return(
     <IssueContext.Provider value={{
         issueArr,
-        // postIssues
+        // postIssues,
+        updateIssue,
+        deleteIssue
     }}>
         {props.children}
         </IssueContext.Provider>)

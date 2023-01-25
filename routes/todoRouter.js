@@ -14,7 +14,7 @@ todoRouter.get("/", (req, res, next) => {
 })
 
 // Get todos by user id
-todoRouter.get("/user", (req, res, next) => {
+todoRouter.get("/:userId", (req, res, next) => {
   Todo.find({ user: req.auth._id }, (err, todos) => {
     if (err) {
       res.status(500)
@@ -59,7 +59,7 @@ todoRouter.delete("/:todoId", (req, res, next) => {
         res.status(500)
         return next(err)
       }
-      return res.status(200).send(`Successfully delete todo: ${deletedTodo.title}`)
+      return res.status(200).send(`Successfully delete todo: ${deletedTodo}`)
     }
   )
 })

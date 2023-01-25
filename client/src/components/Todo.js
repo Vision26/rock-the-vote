@@ -1,21 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import '../App.css'
 import TodoForm from './TodoForm.js'
+import {UserContextAuth} from '../context/UserContextAuth.js'
 
 export default function Todo(props) {
-const { title, description, imgUrl, _id, upvotes, downvotes, comments } = props
+    //these props are being grabbed from Profile.js - Todo compo. JSX
+const { title, description, imgUrl, _id, upvotes, downvotes, comments, edit, deleteIssue } = props
+//sets the on/off button toggle on DOM
 const [editToggle, setEditToggle] = useState(false)
-
+//this is grabbing user from userState in UserContextAuth
+const {user} = useContext(UserContextAuth)
 return(
     <div className='bounty'> 
 
+{/* this adds an open and close feature to posts */}
         {!editToggle ?
         <>
-            <img src={imgUrl} alt='images'/>
+            <img src={imgUrl} alt='images' width={300}/>
             <h2>{title}</h2>
             <h3>{description}</h3>
-            <button></button>
-            <button></button>
+            <h3>{upvotes.length - downvotes.length}</h3>
+            <button onClick={() => edit(_id, {upVoting: true, userId: user._id})}>Upvote</button>
+            <button onClick={() => edit(_id, {downVoting: true, userId: user._id})}>Downvote</button>
             <button className='delete-btn' onClick={() => deleteIssue(_id)}>Delete</button>
             <button className='edit-btn' onClick={() => setEditToggle(prev => !prev)}>Edit</button>
         </>

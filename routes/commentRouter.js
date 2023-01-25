@@ -21,7 +21,9 @@ commentRouter.post('/:postId', (req, res, next) => {
 })
 
 commentRouter.get('/:postId', (req, res, next) => {
-    Todo.find((err, comms) => {
+    Todo.find(
+        {_id: req.params.postId},
+        (err, comms) => {
         if (err) {
             res.status(500)
             return next(err)

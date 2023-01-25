@@ -18,6 +18,7 @@ function UserProviderAuth(props) {
     }
 
     const [userState, setUserState] = useState(initState)
+    const {user, token, errMsg} = userState
     // const [commentState, setCommentState] = useState([])
 
     const signup = credentials => {

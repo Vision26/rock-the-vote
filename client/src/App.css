@@ -1,4 +1,4 @@
-* {
+/* * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -6,7 +6,8 @@
   font-family: sans-serif;
   outline: none;
   text-decoration: none;
-}
+} */
+/* Do Not Applicate */
 
 .app {
   background-color: #eee9;
