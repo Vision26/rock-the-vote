@@ -1,14 +1,17 @@
 import React, {useContext} from 'react'
-import { UserContext } from '../context/UserContext.js'
+// import { UserContext } from '../context/UserContext.js'
 
 function Public(props){
-const {title} = props
-  return (
-    <div>
-<h1>{title}</h1>
-  </div>
+  return(
+<div></div>
   )
 }
-
-export default Public
-//have a way to get all todos regardless of the user for all users to access and comment and vote
+  export default Public
+  //have a way to get all todos regardless of the user for all users to access and comment and vote
+  // const {title} = props
+  //   return (
+  //     <div>
+  // <h1>{title}</h1>
+  //   </div>
+  //   )
+  // }

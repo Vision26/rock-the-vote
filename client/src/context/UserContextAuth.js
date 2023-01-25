@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-const UserContext = React.createContext()
+const UserContextAuth = React.createContext()
 
 const userAxios = axios.create()
 
@@ -10,17 +10,15 @@ userAxios.interceptors.request.use(config => {
     return config
 })
 
-function UserProvider(props) {
+function UserProviderAuth(props) {
     const initState = {
         user: JSON.parse(localStorage.getItem("user")) || {},
         token: localStorage.getItem("token") || "",
-        todos: [],
-        errMsg:''
+        errMsg: ''
     }
 
     const [userState, setUserState] = useState(initState)
-
-const [ commentState, setCommentState ] = useState([])
+    // const [commentState, setCommentState] = useState([])
 
     const signup = credentials => {
         axios.post('/auth/signup', credentials)
@@ -37,6 +35,15 @@ const [ commentState, setCommentState ] = useState([])
             })
             .catch(err => handleAuthErr(err.response.data.errMsg))
     }
+
+const getUserTodos = () => {
+    userAxios.get('/api/todo/user')
+        .then(res => setUserState(prevState => ({
+            ...prevState,
+            todos: res.data
+        })))
+        .catch(err => console.log(err.response.data.errMsg))
+}
 
     const login = credentials => {
         axios.post('/auth/login', credentials)
@@ -75,47 +82,70 @@ const [ commentState, setCommentState ] = useState([])
     const resetAuthErr = () => {
         setUserState(prevState => ({
             ...prevState,
-            errMsg:""
+            errMsg: ""
         }))
     }
 
-    const getUserTodos = () => {
-        userAxios.get('/api/todo/user')
-        .then(res => setUserState(prevState => ({
-            ...prevState,
-            todos: res.data
-        })))
-        .catch(err => console.log(err.response.data.errMsg))
-    }
 
-    const addTodo = newTodo => {
-        userAxios.post("/api/todo", newTodo)
-        .then(res => setUserState(prevState => ({
-            ...prevState,
-            todos: [...prevState.todos, res.data]
-        })))
-        .catch(err => console.log(err.response.data.errMsg))
-    }
-
-    const updateTodo = (todoId, updates) => {
-        userAxios.put(`/api/todo/${todoId}`, updates)
-        .then(res => {
-       getUserTodos()
-        })
-        .catch()
-    }
-
-    const addComment = (id, newComment) => {
-        userAxios.post(`/api/todo/comment/${id}`, {newComment})
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err))
-    }
-//(two seperate)->arrays for user that have upvote and downvoted
     return (
-        <UserContext.Provider value={{ userAxios, commentState, setCommentState,...userState, signup, login, logout, addTodo, resetAuthErr, updateTodo, getUserTodos, addComment }}>
+        <UserContextAuth.Provider value={{
+            // userAxios,
+            // commentState,
+            // setCommentState,
+            ...userState,
+            signup,
+            login,
+            logout,
+            // addTodo,
+            resetAuthErr
+            // updateTodo,
+            // getUserTodos,
+            // addComment
+        }}>
             {props.children}
-        </UserContext.Provider>
+        </UserContextAuth.Provider>
     )
 }
 
-export { UserProvider, UserContext }
+export { UserProviderAuth, UserContextAuth }
+
+// const getUserTodos = () => {
+//     userAxios.get('/api/todo/user')
+//         .then(res => setUserState(prevState => ({
+//             ...prevState,
+//             todos: res.data
+//         })))
+//         .catch(err => console.log(err.response.data.errMsg))
+// }
+
+// const getAllTodos = () => {
+//     userAxios.get('/api/todo')
+//         .then(res => setUserState(prevState => ({
+//             ...prevState,
+//             allTodos: res.data
+//         })))
+//         .catch(err => console.log)
+// }
+
+// const addTodo = newTodo => {
+//     userAxios.post("/api/todo", newTodo)
+//         .then(res => setUserState(prevState => ({
+//             ...prevState,
+//             todos: [...prevState.todos, res.data]
+//         })))
+//         .catch(err => console.log(err.response.data.errMsg))
+// }
+
+// const updateTodo = (todoId, updates) => {
+//     userAxios.put(`/api/todo/${todoId}`, updates)
+//         .then(res => {
+//             getUserTodos()
+//         })
+//         .catch()
+// }
+
+// const addComment = (id, newComment) => {
+//     userAxios.post(`/api/todo/comment/${id}`, { newComment })
+//         .then(res => setCommentState(res.data))
+//         .catch(err => console.log(err))
+// }

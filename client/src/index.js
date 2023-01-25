@@ -2,15 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
-import { UserProvider } from './context/UserContext.js'
+import { UserProviderAuth } from './context/UserContextAuth'
+import { IssueProvider } from './appcontext/IssueContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <UserProvider>
+    <IssueProvider>
+    <UserProviderAuth>
       <App />
-      </UserProvider>
+      </UserProviderAuth>
+      </IssueProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

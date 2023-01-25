@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react'
 import AuthForm from './AuthForm.js'
-import { UserContext } from '../context/UserContext'
+import { UserContextAuth } from '../context/UserContextAuth'
 
 const initInputs = { username: "", password: "" }
 
 export default function Auth(){
   const [inputs, setInputs] = useState(initInputs)
   const [toggle, setToggle] = useState(false)
-  const { signup, login, errMsg, resetAuthErr } = useContext(UserContext)
+  const { signup, login, errMsg, resetAuthErr } = useContext(UserContextAuth)
 
   function handleChange(e){
     const {name, value} = e.target
