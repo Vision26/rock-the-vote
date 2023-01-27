@@ -72,7 +72,7 @@
   height: 100vh;
 }
 
-.profile {
+/* .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,7 +106,7 @@
   margin: 8px 0;
   padding: 8px;
   border-radius: 5px
-}
+} */
 
 /* ------------------------------------------------------------------------------------------- */
 * {
@@ -114,8 +114,8 @@
   font-family: sans-serif;
   margin: 0;
   padding: 0;
-  color:#333;
-  background-color: black;
+  /* color:#333;
+  background-color: black; */
 }
 
 h1{
@@ -135,6 +135,12 @@ p{
 
 .bounty{
   border: 1px solid #333;
+  padding: 10px;
+  margin: 5px;
+}
+
+.bounty-comment{
+  border: 1px solid rgb(158, 120, 120);
   padding: 10px;
   margin: 5px;
 }
@@ -170,6 +176,11 @@ button{
 
 .edit-btn{
   background-color:darkslategrey;
+  color: whitesmoke;
+}
+
+.edit-btn-comment{
+  background-color:rgb(168, 144, 159);
   color: whitesmoke;
 }
 

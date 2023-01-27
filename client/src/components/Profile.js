@@ -3,23 +3,44 @@ import Todo from './Todo.js'
 import TodoForm from './TodoForm.js'
 import '../App.css'
 import {IssueContext} from '../appcontext/IssueContext.js'
+import { CommContext } from '../commcontext/CommContext.js'
+import CommentForm from '../comments/CommentForm.js'
 
-export default function Profile() {
-  const {postIssues, issueArr, updateIssue, deleteIssue} = useContext(IssueContext)
 
+export default function Profile(props) {
+  //IssueContext
+  const {
+    updateVotes, 
+    getIssues, 
+    postIssues, 
+    issues,  
+    updateIssue, 
+    deleteIssue
+  } = useContext(IssueContext)
+//Commcontext 
+const {addComment, commentArr} = useContext(CommContext)
+const id = issues.map(get => get._id)
   return(
     <div className='bounty-container'>
       <TodoForm 
+      key={postIssues}
       submit={postIssues}
       btnText='Submit'
       />
       
-      {issueArr.map(iss => <Todo 
+      {issues.map(iss => <Todo 
       key={iss._id}
       edit={updateIssue}
       deleteIssue={deleteIssue}
       {...iss}
+      getIssues={getIssues}
+      updateVotes={updateVotes}
+      // commentArr={commentArr.map(get => get)}
+      addComment={addComment}
+      btnText='Submit Comment'
+      commentArr={commentArr}
       />)}
+   
     </div>
   )
 }

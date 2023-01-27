@@ -25,7 +25,7 @@ todoRouter.get("/:userId", (req, res, next) => {
 })
 
 // Add new Todo
-todoRouter.post("/", (req, res, next) => {
+todoRouter.post("/newTodo", (req, res, next) => {
   req.body.user = req.auth._id
   const newTodo = new Todo(req.body)
   newTodo.save((err, savedTodo) => {
@@ -64,8 +64,23 @@ todoRouter.delete("/:todoId", (req, res, next) => {
   )
 })
 
+todoRouter.put('/edittodo/:todoId', (req, res, next) => {
+  Todo.findOneAndUpdate(
+    {_id: req.params.todoId},
+    req.body,
+    {new: true},
+    (err, update) => {
+      if(err){
+        res.status(500)
+        return next(err)
+      }
+      return res.status(201).send(update)
+    }
+  )
+})
+
 // Update Todo
-todoRouter.put("/:todoId", async(req, res, next) => {
+todoRouter.put("/votes/:todoId", async(req, res, next) => {
   const newBody = { ...req.body }
   const currentTodo = await Todo.findOne({ _id: req.params.todoId })
   const votes = { upvotes: [...currentTodo.upvotes], downvotes: [...currentTodo.downvotes] }
